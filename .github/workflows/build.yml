@@ -1,0 +1,24 @@
+name: C/C++ Compile on Push
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create Build Directory
+      run: mkdir build
+    - name: Configure CMake
+      run: cmake -S . -B build
+    - name: Build
+      run: cmake --build build --config Release
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifacts
+        path: build/
